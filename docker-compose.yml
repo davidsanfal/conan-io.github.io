@@ -1,10 +1,16 @@
 services:
-    jekyll:
-        image: jekyll/jekyll:3.8
-        command: /bin/sh -c /srv/jekyll/serve.sh
-        ports:
-            - 4000:4000
-        volumes:
-            - .:/srv/jekyll
-        environment:
-            - JEKYLL_ENV=virtual
+  jekyll:
+    image: jekyll/jekyll
+    container_name: jekyll_site
+    ports:
+      - "4000:4000"
+      - "35729:35729"
+    volumes:
+      - ".:/srv/jekyll"
+    working_dir: /srv/jekyll
+    stdin_open: true
+    tty: true
+    command: >
+      sh -c "rm -rf _site .jekyll-cache && 
+             gem install webrick && 
+             jekyll serve --livereload --future --host 0.0.0.0 --force_polling"
